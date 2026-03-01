@@ -7,8 +7,8 @@ const gameBoard = (() => {
   return { board }
 })();
 
-function createPlayer(userName, marker) {
-  return { userName, marker }
+function createPlayer(playerName, marker) {
+  return { playerName, marker }
 }
 
 
