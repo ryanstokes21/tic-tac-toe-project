@@ -6,7 +6,5 @@ const gameBoard = (() => {
 function createPlayer(playerName, marker) {
   return { playerName, marker }
 }
-
-
 const player1 = createPlayer('rob', 'x');
 const player2 = createPlayer('bill', 'o');
