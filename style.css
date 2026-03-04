@@ -1,0 +1,23 @@
+#board-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+  gap: 5px;
+}
+
+.cell {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+.controls {
+  text-align: center;
+}
