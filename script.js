@@ -1,65 +1,94 @@
 const gameBoard = (() => {
-  const board = ['','','','','','','','',''];
+  let board = ['', '', '', '', '', '', '', '', ''];
   
-  return { board };
-})();
+  const render = () => {
+    const boardContainer = document.getElementById('board-container');
+    boardContainer.innerHTML = '';
+    board.forEach((cellValue, index) => {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.textContent = cellValue;
+      cell.setAttribute('data-index', index);
+      boardContainer.appendChild(cell);
+    });
+  }
 
-const winningCombos = (() => {
-  const combos = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  return { combos };
+  const update = (index, marker) => {
+    board[index] = marker;
+    render();
+  };
+
+  const getBoard = () => board;
+
+  const reset = () => {
+    board = ['', '', '', '', '', '', '', '', ''];
+    render();
+  };
+
+  return { update, getBoard, reset };
 })();
 
 function createPlayer(playerName, marker) {
   return { playerName, marker };
 }
-const player1 = createPlayer('rob', 'x');
-const player2 = createPlayer('bill', 'o');
 
-function makeMove() {
-  let currentPlayer = player1;
+const game = (() => {
+  let player1, player2;
+  let currentPlayer;
+  let gameOver = false;
   
-  function checkWinner(board, player) {
-    let winner = null
-    winningCombos.combos.forEach(combo => {
+  const start = () => {
+    player1 = createPlayer(document.getElementById('p1-name').value || 'P1', 'X');
+    player2 = createPlayer(document.getElementById('p2-name').value || 'P2', 'O');
+    currentPlayer = player1;
+    gameOver = false;
+    gameBoard.reset();
+  }
+
+  const switchTurn = () => {
+    currentPlayer = (currentPlayer === player1) ? player2 : player1; 
+  }
+
+  const checkWinner = () => {
+    const combos = [
+    [0,1,2], [3,4,5], [6,7,8],
+    [0,3,6], [1,4,7], [2,5,8],
+    [0,4,8], [2,4,6],
+    ];
+    const board = gameBoard.getBoard();
+    
+    for (let combo of combos) {
       const [a, b, c] = combo;
-      if(board[a] && board[a] === board[b] && board[a] === board[c]) {
-        winner = player;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return board[a]; // Return 'X' or 'O'
+      }
+    }
+    return board.includes('') ? null : 'tie';
+  }
+
+  const clickHandle = () => {
+    document.getElementById('start').addEventListener('click', start);
+    document.getElementById('reset').addEventListener('click', start);
+
+    const boardContainer = document.getElementById('board-container');
+    boardContainer.addEventListener('click', (e) => {
+      if (gameOver || !e.target.classList.contains('cell')) return;
+      
+      const index = e.target.getAttribute('data-index');
+      if (gameBoard.getBoard()[index] !== '') return; // Cell occupied
+
+      gameBoard.update(index, currentPlayer.marker);
+      
+      const winner = checkWinner();
+      if (winner) {
+        gameOver = true;
+        alert((winner === 'tie') ? "It's a Tie!" : `${winner} wins!`);
+      } else {
+        switchTurn();
       }
     });
-    return winner;
   }
-  return function switchTurn() {
-    const playerMove = +prompt('Enter a index between 0-8');
-    if(playerMove >= 0 && playerMove <= 9) {
-      if(currentPlayer){
-        gameBoard.board.forEach(() => {
-          gameBoard.board.splice(playerMove, 1, currentPlayer.marker);
-        });
-        const winner = checkWinner(gameBoard.board, currentPlayer.playerName);
-        console.log(winner);
-      }
-      currentPlayer = (currentPlayer === player1) ? player2 : player1;
-      updateBoard();
-    }
-  }
-  function updateBoard() {
-    console.log(`${player1.playerName}: ${player1.marker} | ${player2.playerName}: ${player2.marker}`)
-    console.log(`${gameBoard.board[0]} | ${gameBoard.board[1]} | ${gameBoard.board[2]}`);
-    console.log("---------");
-    console.log(`${gameBoard.board[3]} | ${gameBoard.board[4]} | ${gameBoard.board[5]}`);
-    console.log("---------");
-    console.log(`${gameBoard.board[6]} | ${gameBoard.board[7]} | ${gameBoard.board[8]}`);
-  }
-}
+  return { clickHandle }
+})();
 
-switchTurn = makeMove();
-switchTurn();
+game.clickHandle();
