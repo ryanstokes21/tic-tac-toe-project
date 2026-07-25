@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.players {
+  display: flex;
+  justify-content: space-around;
+}
+
+.game-board {
+  display: flex;
+  flex-wrap: wrap;
+  width: 750px;
+}
+
+.hidden {
+  display: none;
+}
+
+.cell {
+  border: 2px solid black;
+  flex-basis: 250px;
+  height: 250px;
+}
+
+.cell:hover {
+  cursor: pointer;
+}

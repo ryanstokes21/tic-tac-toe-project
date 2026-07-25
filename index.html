@@ -3,8 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
     <title>Tic Tac Toe</title>
   </head>
-  <body></body>
+  <body>
+    <div id="start-screen">
+      <div>
+        <label for="player1">Player1 Name:</label>
+        <input type="text" id="player1" />
+      </div>
+      <div>
+        <label for="player2">Player2 Name:</label>
+        <input type="text" id="player2" />
+      </div>
+      <button id="start">Start Game</button>
+    </div>
+    <div id="game">
+      <div class="players">
+        <div id="player1-name"></div>
+        <div id="player2-name"></div>
+      </div>
+      <div id="game-board" class="hidden game-board"></div>
+    </div>
+
+    <div id="winner-alert" class="hidden">
+      <div id="winner"></div>
+      <button id="start-screen-btn">Start Screen</button>
+    </div>
+  </body>
 </html>
